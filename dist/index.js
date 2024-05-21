@@ -525,7 +525,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OidcClient = void 0;
 const http_client_1 = __nccwpck_require__(255);
-const auth_1 = __nccwpck_require__(526);
+const auth_1 = __nccwpck_require__(135);
 const core_1 = __nccwpck_require__(186);
 class OidcClient {
     static createHttpClient(allowRetry = true, maxRetry = 10) {
@@ -994,7 +994,7 @@ exports.toCommandProperties = toCommandProperties;
 
 /***/ }),
 
-/***/ 526:
+/***/ 135:
 /***/ (function(__unused_webpack_module, exports) {
 
 "use strict";
@@ -2723,62 +2723,28 @@ exports["default"] = _default;
 /***/ }),
 
 /***/ 713:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const core = __nccwpck_require__(186)
-const { wait } = __nccwpck_require__(312)
-
-/**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
- */
 async function run() {
-  try {
-    const ms = core.getInput('milliseconds', { required: true })
+  const exec = __nccwpck_require__(526)
+  const core = __nccwpck_require__(186)
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+  const arguments = ['streamdeck', 'pack']
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
-  } catch (error) {
-    // Fail the workflow run if an error occurs
-    core.setFailed(error.message)
+  if (core.getInput('version')) {
+    arguments.push('--version', core.getInput('version'))
   }
-}
 
-module.exports = {
-  run
+  await exec.exec('npx', arguments)
 }
 
 
 /***/ }),
 
-/***/ 312:
+/***/ 526:
 /***/ ((module) => {
 
-/**
- * Wait for a number of milliseconds.
- *
- * @param {number} milliseconds The number of milliseconds to wait.
- * @returns {Promise<string>} Resolves with 'done!' after the wait is over.
- */
-async function wait(milliseconds) {
-  return new Promise(resolve => {
-    if (isNaN(milliseconds)) {
-      throw new Error('milliseconds not a number')
-    }
-
-    setTimeout(() => resolve('done!'), milliseconds)
-  })
-}
-
-module.exports = { wait }
+module.exports = eval("require")("@actions/exec");
 
 
 /***/ }),
