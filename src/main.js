@@ -23,3 +23,7 @@ async function run() {
 
   await exec.exec('npx', arguments)
 }
+
+module.exports = {
+  run
+}
