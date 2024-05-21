@@ -6,21 +6,7 @@ async function run() {
 
   const arguments = ['streamdeck', 'pack']
 
-  try {
-    if (core.getInput('path', { required: true })) {
-      const sdPluginPath = core.getInput('path')
-
-      if (!fs.existsSync(sdPluginPath)) {
-        core.setFailed(`Path '${sdPluginPath}' does not exist.`)
-        return
-      }
-
-      arguments.push(sdPluginPath)
-    }
-  } catch (error) {
-    core.setFailed(`path is required`)
-    return
-  }
+  arguments.push(getSdPluginPath())
 
   if (core.getInput('outputPath')) {
     arguments.push('--output', core.getInput('outputPath'))
@@ -53,6 +39,7 @@ function getSdPluginPath() {
       return
     } else {
       sdPluginPath = file.name
+      core.info(`Using auto-detected .sdPlugin directory '${sdPluginPath}'`)
     }
   }
 
