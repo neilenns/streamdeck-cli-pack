@@ -4004,6 +4004,9 @@ async function run() {
     arguments.push('--no-update-check')
   }
 
+  // Dump the version of the streamdeck cli being used
+  await exec.exec('npx', ['streamdeck', '-v'])
+
   // Run the actual command
   await exec.exec('npx', arguments)
 }
