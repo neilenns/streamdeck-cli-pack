@@ -4035,8 +4035,8 @@ function getVersion() {
     version = `${githubRef.replace('refs/tags/', '').replace('v', '')}.0`
     core.info(`Using github tag version '${version}'`)
   } else {
-    // Use the version from ${{ github.event.number }}.${{ github.run_number }}
-    version = `0.0.${process.env.GITHUB_RUN_NUMBER}.${process.env.GITHUB_RUN_ID}`
+    // Use the version from the run number, which is typically the pull request number
+    version = `0.0.${process.env.GITHUB_RUN_NUMBER}.0`
     core.info(`Using github event and run number for version: '${version}'`)
   }
 

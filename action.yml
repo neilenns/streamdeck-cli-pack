@@ -24,8 +24,8 @@ inputs:
   version:
     description:
       'The version for the plugin. Optional. If omitted the version tag for the
-      GitHub release is used, or the run number and ID for pull requests. If
-      neither of those are available uses the version in the manifest.json.'
+      GitHub release is used. If no version tag is available the run number is
+      used.'
     required: false
 
 runs:
