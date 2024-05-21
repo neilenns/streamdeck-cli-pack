@@ -3959,12 +3959,21 @@ exports["default"] = _default;
 async function run() {
   const exec = __nccwpck_require__(514)
   const core = __nccwpck_require__(186)
+  const fs = __nccwpck_require__(147)
+  const path = __nccwpck_require__(17)
 
   const arguments = ['streamdeck', 'pack']
 
   try {
     if (core.getInput('path', { required: true })) {
-      arguments.push(core.getInput('path'))
+      const sdPluginPath = core.getInput('path')
+
+      if (!fs.existsSync(sdPluginPath)) {
+        core.setFailed(`Path '${sdPluginPath}' does not exist.`)
+        return
+      }
+
+      arguments.push(sdPluginPath)
     }
   } catch (error) {
     core.setFailed(`path is required`)

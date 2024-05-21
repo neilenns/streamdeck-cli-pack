@@ -1,12 +1,21 @@
 async function run() {
   const exec = require('@actions/exec')
   const core = require('@actions/core')
+  const fs = require('fs')
+  const path = require('path')
 
   const arguments = ['streamdeck', 'pack']
 
   try {
     if (core.getInput('path', { required: true })) {
-      arguments.push(core.getInput('path'))
+      const sdPluginPath = core.getInput('path')
+
+      if (!fs.existsSync(sdPluginPath)) {
+        core.setFailed(`Path '${sdPluginPath}' does not exist.`)
+        return
+      }
+
+      arguments.push(sdPluginPath)
     }
   } catch (error) {
     core.setFailed(`path is required`)
