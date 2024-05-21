@@ -1,6 +1,9 @@
 name: 'Streamdeck cli pack'
 description: 'Packs a StreamDeck plugin using the Streamdeck cli tool'
 author: 'Neil Enns'
+branding:
+  icon: 'package'
+  color: 'blue'
 
 # Define your inputs here.
 inputs:
