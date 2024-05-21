@@ -5,12 +5,16 @@ async function run() {
   const arguments = ['streamdeck', 'pack']
 
   try {
-    if (core.getInput('outputPath', { required: true })) {
-      arguments.push('--output', core.getInput('outputPath'))
+    if (core.getInput('path', { required: true })) {
+      arguments.push(core.getInput('path'))
     }
   } catch (error) {
-    core.setFailed(`outputPath is required`)
+    core.setFailed(`path is required`)
     return
+  }
+
+  if (core.getInput('outputPath')) {
+    arguments.push('--output', core.getInput('outputPath'))
   }
 
   if (core.getBooleanInput('force')) {
