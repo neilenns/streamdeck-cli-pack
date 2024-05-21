@@ -3,28 +3,28 @@ const core = require('@actions/core')
 const fs = require('fs')
 
 async function run() {
-  const arguments = ['streamdeck', 'pack']
+  const args = ['streamdeck', 'pack']
 
   // Get the plugin path, either as specified in the workflow or auto-detected.
-  arguments.push(getSdPluginPath())
+  args.push(getSdPluginPath())
   if (core.getInput('outputPath')) {
-    arguments.push('--output', core.getInput('outputPath'))
+    args.push('--output', core.getInput('outputPath'))
   }
 
   // Get the version, either as specified in the workflow or from the GitHub environment.
   const version = getVersion()
   if (version) {
-    arguments.push('--version', version)
+    args.push('--version', version)
   }
 
   // Set the --force flag if requested.
   if (core.getBooleanInput('force')) {
-    arguments.push('--force')
+    args.push('--force')
   }
 
   // Set the --dry-run flag if requested.
   if (core.getBooleanInput('dryRun')) {
-    arguments.push('--dry-run')
+    args.push('--dry-run')
   }
 
   // Set the --force-update-check and --no-update-check flags if requested,
@@ -39,18 +39,18 @@ async function run() {
   }
 
   if (forceUpdateCheck) {
-    arguments.push('--force-update-check')
+    args.push('--force-update-check')
   }
 
   if (noUpdateCheck) {
-    arguments.push('--no-update-check')
+    args.push('--no-update-check')
   }
 
   // Dump the version of the streamdeck cli being used
   await exec.exec('npx', ['streamdeck', '-v'])
 
   // Run the actual command
-  await exec.exec('npx', arguments)
+  await exec.exec('npx', args)
 }
 
 /**
