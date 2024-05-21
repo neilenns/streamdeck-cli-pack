@@ -5,22 +5,48 @@ const fs = require('fs')
 async function run() {
   const arguments = ['streamdeck', 'pack']
 
+  // Get the plugin path, either as specified in the workflow or auto-detected.
   arguments.push(getSdPluginPath())
-
   if (core.getInput('outputPath')) {
     arguments.push('--output', core.getInput('outputPath'))
   }
 
-  if (core.getBooleanInput('force')) {
-    arguments.push('--force')
-  }
-
+  // Get the version, either as specified in the workflow or from the GitHub environment.
   const version = getVersion()
-
   if (version) {
     arguments.push('--version', version)
   }
 
+  // Set the --force flag if requested.
+  if (core.getBooleanInput('force')) {
+    arguments.push('--force')
+  }
+
+  // Set the --dry-run flag if requested.
+  if (core.getBooleanInput('dryRun')) {
+    arguments.push('--dry-run')
+  }
+
+  // Set the --force-update-check and --no-update-check flags if requested,
+  // but only one or the other.
+  const forceUpdateCheck = core.getBooleanInput('forceUpdateCheck')
+  const noUpdateCheck = core.getBooleanInput('noUpdateCheck')
+  if (forceUpdateCheck && noUpdateCheck) {
+    core.setFailed(
+      'forceUpdateCheck and noUpdateCheck cannot be set to true at the same time'
+    )
+    return
+  }
+
+  if (forceUpdateCheck) {
+    arguments.push('--force-update-check')
+  }
+
+  if (noUpdateCheck) {
+    arguments.push('--no-update-check')
+  }
+
+  // Run the actual command
   await exec.exec('npx', arguments)
 }
 
