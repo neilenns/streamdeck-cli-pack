@@ -23,7 +23,7 @@ async function run() {
 }
 
 function getSdPluginPath() {
-  const sdPluginPath = core.getInput('path')
+  let sdPluginPath = core.getInput('path')
 
   if (sdPluginPath === '') {
     const files = fs.readdirSync(process.cwd(), { withFileTypes: true })
