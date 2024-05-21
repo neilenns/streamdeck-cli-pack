@@ -78,7 +78,7 @@ function getVersion() {
   }
 
   // Try getting the version from the release tag
-  if (githubgithubRef.startsWith('refs/tags/')) {
+  if (githubRef.startsWith('refs/tags/')) {
     version = `${githubRef.replace('refs/tags/', '').replace('v', '')}.0`
     core.info(`Using github tag version '${version}'`)
 
@@ -87,7 +87,7 @@ function getVersion() {
 
   // Try getting the version from the pull request number
   if (githubRef.startsWith('refs/pull/')) {
-    version = `0.0.${githubRef.replace('refs/pull/', '')}.0`
+    version = `0.0.${githubRef.replace('refs/pull/', '')}`
     core.info(`Using github pull request number '${version}'`)
 
     return version
