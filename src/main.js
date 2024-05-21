@@ -37,6 +37,32 @@ async function run() {
   await exec.exec('npx', arguments)
 }
 
+function getSdPluginPath() {
+  const sdPluginPath = core.getInput('path')
+
+  if (sdPluginPath === '') {
+    const files = fs.readdirSync(process.cwd(), { withFileTypes: true })
+    const sdPluginPath = files.find(
+      file => file.isDirectory() && file.name.endsWith('.sdPlugin')
+    )
+
+    if (!sdPluginPath) {
+      core.setFailed(
+        'path not specified and no .sdPlugin directory found in the current working directory.'
+      )
+      return
+    } else {
+      sdPluginPath = file.name
+    }
+  }
+
+  if (!fs.existsSync(sdPluginPath)) {
+    core.setFailed(`Path '${sdPluginPath}' does not exist.`)
+    return
+  }
+
+  return sdPluginPath
+}
 module.exports = {
   run
 }

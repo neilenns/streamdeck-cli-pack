@@ -5,8 +5,10 @@ author: 'Neil Enns'
 # Define your inputs here.
 inputs:
   path:
-    description: 'The path to the plugin to pack. Required.'
-    required: true
+    description:
+      'The path to the plugin to pack. Optional. If omitted the first directory
+      in the working directory ending in .sdPlugin is used.'
+    required: false
 
   outputPath:
     description:
