@@ -4031,7 +4031,7 @@ function getVersion() {
   const githubRef = process.env.GITHUB_REF
 
   if (!githubRef) {
-    core.warn('No github ref found, using manifest.json version')
+    core.warning('No github ref found, using manifest.json version')
     return undefined
   }
 
@@ -4051,7 +4051,7 @@ function getVersion() {
     return version
   }
 
-  core.warn(
+  core.warning(
     'No version found in github environment, using manifest.json version'
   )
   return undefined
