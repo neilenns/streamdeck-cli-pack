@@ -13,8 +13,8 @@ Add the following step to your workflow:
 
 This will automatically pack the folder ending in `.sdPlugin` in the root of
 your repository. The version will be set to either the release tag (e.g.
-`1.0.0.0` for a release tag of `v1.0.0`), or the pull request number if used in
-a pull request workflow (e.g. `0.0.36.0` for pull request #36).
+`1.0.0.0` for a release tag of `v1.0.0`), or the run number if used in
+a pull request workflow (e.g. `0.0.36.0` for run #36).
 
 v1 of this action uses version 0.3.0 of @elgato/cli.
 
