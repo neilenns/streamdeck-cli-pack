@@ -3954,7 +3954,7 @@ exports["default"] = _default;
 /***/ }),
 
 /***/ 713:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 async function run() {
   const exec = __nccwpck_require__(514)
@@ -3980,6 +3980,10 @@ async function run() {
   }
 
   await exec.exec('npx', arguments)
+}
+
+module.exports = {
+  run
 }
 
 
@@ -4141,9 +4145,15 @@ var __webpack_exports__ = {};
 /**
  * The entrypoint for the action.
  */
-const { run } = __nccwpck_require__(713)
+const core = __nccwpck_require__(186)
 
-run()
+try {
+  const { run } = __nccwpck_require__(713)
+
+  run()
+} catch (error) {
+  core.setFailed(error.message)
+}
 
 })();
 
