@@ -4043,10 +4043,10 @@ function getVersion() {
     return version
   }
 
-  // Try getting the version from the pull request number
-  if (githubRef.startsWith('refs/pull/')) {
-    version = `0.0.${githubRef.replace('refs/pull/', '')}`
-    core.info(`Using github pull request number '${version}'`)
+  // Try getting the version from ${{ github.event.number }}.${{ github.run_number }}
+  if (githubRef.startsWith('refs/heads/')) {
+    version = `0.0.${process.env.GITHUB_RUN_NUMBER}.${process.env.GITHUB_RUN_ID}`
+    core.info(`Using github event and run number for version: '${version}'`)
 
     return version
   }
