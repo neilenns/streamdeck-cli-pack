@@ -3956,12 +3956,11 @@ exports["default"] = _default;
 /***/ 713:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-async function run() {
-  const exec = __nccwpck_require__(514)
-  const core = __nccwpck_require__(186)
-  const fs = __nccwpck_require__(147)
-  const path = __nccwpck_require__(17)
+const exec = __nccwpck_require__(514)
+const core = __nccwpck_require__(186)
+const fs = __nccwpck_require__(147)
 
+async function run() {
   const arguments = ['streamdeck', 'pack']
 
   arguments.push(getSdPluginPath())

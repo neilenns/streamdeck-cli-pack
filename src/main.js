@@ -1,9 +1,8 @@
-async function run() {
-  const exec = require('@actions/exec')
-  const core = require('@actions/core')
-  const fs = require('fs')
-  const path = require('path')
+const exec = require('@actions/exec')
+const core = require('@actions/core')
+const fs = require('fs')
 
+async function run() {
   const arguments = ['streamdeck', 'pack']
 
   arguments.push(getSdPluginPath())
