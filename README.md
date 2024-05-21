@@ -8,7 +8,6 @@ Add the following step to your workflow:
 
 ```yaml
 - name: Pack
-  id: pack
   uses: neilenns/streamdeck-cli-pack@v1
 ```
 
@@ -38,7 +37,6 @@ You can specify additional options using the `with` keyword:
 
 ```yaml
 - name: Pack
-  id: pack
   uses: neilenns/streamdeck-cli-pack@v1
   with:
     outputPath: 'dist'
