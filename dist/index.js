@@ -3961,25 +3961,54 @@ const core = __nccwpck_require__(186)
 const fs = __nccwpck_require__(147)
 
 async function run() {
-  const arguments = ['streamdeck', 'pack']
+  const args = ['streamdeck', 'pack']
 
-  arguments.push(getSdPluginPath())
-
+  // Get the plugin path, either as specified in the workflow or auto-detected.
+  args.push(getSdPluginPath())
   if (core.getInput('outputPath')) {
-    arguments.push('--output', core.getInput('outputPath'))
+    args.push('--output', core.getInput('outputPath'))
   }
 
-  if (core.getBooleanInput('force')) {
-    arguments.push('--force')
-  }
-
+  // Get the version, either as specified in the workflow or from the GitHub environment.
   const version = getVersion()
-
   if (version) {
-    arguments.push('--version', version)
+    args.push('--version', version)
   }
 
-  await exec.exec('npx', arguments)
+  // Set the --force flag if requested.
+  if (core.getBooleanInput('force')) {
+    args.push('--force')
+  }
+
+  // Set the --dry-run flag if requested.
+  if (core.getBooleanInput('dryRun')) {
+    args.push('--dry-run')
+  }
+
+  // Set the --force-update-check and --no-update-check flags if requested,
+  // but only one or the other.
+  const forceUpdateCheck = core.getBooleanInput('forceUpdateCheck')
+  const noUpdateCheck = core.getBooleanInput('noUpdateCheck')
+  if (forceUpdateCheck && noUpdateCheck) {
+    core.setFailed(
+      'forceUpdateCheck and noUpdateCheck cannot be set to true at the same time'
+    )
+    return
+  }
+
+  if (forceUpdateCheck) {
+    args.push('--force-update-check')
+  }
+
+  if (noUpdateCheck) {
+    args.push('--no-update-check')
+  }
+
+  // Dump the version of the streamdeck cli being used
+  await exec.exec('npx', ['streamdeck', '-v'])
+
+  // Run the actual command
+  await exec.exec('npx', args)
 }
 
 /**

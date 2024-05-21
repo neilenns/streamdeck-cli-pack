@@ -28,6 +28,25 @@ inputs:
       used.'
     required: false
 
+  dryRun:
+    description: 'If true, generates a report without creating a package.'
+    default: false
+    required: false
+
+  forceUpdateCheck:
+    description:
+      'If true, forces an update check for new validation rules. Cannot be used
+      in conjunction with noUpdateCheck.'
+    default: false
+    required: false
+
+  noUpdateCheck:
+    description:
+      'If true, prevents an update check of new validation rules. Cannot be used
+      in conjunction with forceUpdateCheck.'
+    default: false
+    required: false
+
 runs:
   using: node20
   main: dist/index.js
