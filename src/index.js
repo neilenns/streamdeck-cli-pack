@@ -1,6 +1,12 @@
 /**
  * The entrypoint for the action.
  */
-const { run } = require('./main')
+const core = require('@actions/core')
 
-run()
+try {
+  const { run } = require('./main')
+
+  run()
+} catch (error) {
+  core.setFailed(error.message)
+}

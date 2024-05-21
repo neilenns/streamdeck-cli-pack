@@ -1,18 +1,32 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Streamdeck cli pack'
+description: 'Packs a StreamDeck plugin using the Streamdeck cli tool'
+author: 'Neil Enns'
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
-    required: true
-    default: '1000'
+  path:
+    description:
+      'The path to the plugin to pack. Optional. If omitted the first directory
+      in the working directory ending in .sdPlugin is used.'
+    required: false
 
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+  outputPath:
+    description:
+      'The path to save the packed plugin to. Optional. If omitted the plugin is
+      saved to the working directory.'
+    required: false
+
+  force:
+    description: 'If true, overwites a package if it exists.'
+    default: false
+    required: false
+
+  version:
+    description:
+      'The version for the plugin. Optional. If omitted the version tag for the
+      GitHub release is used. If no version tag is available the run number is
+      used.'
+    required: false
 
 runs:
   using: node20

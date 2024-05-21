@@ -1,28 +1,88 @@
+const exec = require('@actions/exec')
 const core = require('@actions/core')
-const { wait } = require('./wait')
+const fs = require('fs')
+
+async function run() {
+  const arguments = ['streamdeck', 'pack']
+
+  arguments.push(getSdPluginPath())
+
+  if (core.getInput('outputPath')) {
+    arguments.push('--output', core.getInput('outputPath'))
+  }
+
+  if (core.getBooleanInput('force')) {
+    arguments.push('--force')
+  }
+
+  const version = getVersion()
+
+  if (version) {
+    arguments.push('--version', version)
+  }
+
+  await exec.exec('npx', arguments)
+}
 
 /**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
+ * Figures out the location of the plugin directory. Uses the provided `path` input if it is set, otherwise
+ * looks for a directory ending in `.sdPlugin` in the current working directory.
+ * @returns {string} The path to the plugin directory
  */
-async function run() {
-  try {
-    const ms = core.getInput('milliseconds', { required: true })
+function getSdPluginPath() {
+  let sdPluginPath = core.getInput('path')
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+  if (sdPluginPath === '') {
+    const files = fs.readdirSync(process.cwd(), { withFileTypes: true })
+    const foundPlugin = files.find(
+      file => file.isDirectory() && file.name.endsWith('.sdPlugin')
+    )
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
-  } catch (error) {
-    // Fail the workflow run if an error occurs
-    core.setFailed(error.message)
+    if (!foundPlugin) {
+      core.setFailed(
+        'path not specified and no .sdPlugin directory found in the current working directory.'
+      )
+      return
+    } else {
+      sdPluginPath = foundPlugin.name
+      core.info(`Using auto-detected .sdPlugin directory '${sdPluginPath}'`)
+    }
   }
+
+  if (!fs.existsSync(sdPluginPath)) {
+    core.setFailed(`Path '${sdPluginPath}' does not exist.`)
+    return
+  }
+
+  return sdPluginPath
+}
+
+/**
+ * Figures out the version for the plugin. Uses the provided `version` input if it is set, otherwise
+ * uses either the github tag version or the pull request number.
+ * @returns {string} The version string
+ */
+function getVersion() {
+  let version = core.getInput('version')
+
+  if (version !== '') {
+    return version
+  }
+
+  // Version wasn't specified so try getting something from the github environment
+  const githubRef = process.env.GITHUB_REF
+
+  // Try getting the version from the release tag
+  if (githubRef && githubRef.startsWith('refs/tags/')) {
+    version = `${githubRef.replace('refs/tags/', '').replace('v', '')}.0`
+    core.info(`Using github tag version '${version}'`)
+  } else {
+    // Use the version from the run number, which is typically the pull request number
+    version = `0.0.${process.env.GITHUB_RUN_NUMBER}.0`
+    core.info(`Using github event and run number for version: '${version}'`)
+  }
+
+  return version
 }
 
 module.exports = {
