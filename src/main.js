@@ -27,17 +27,17 @@ function getSdPluginPath() {
 
   if (sdPluginPath === '') {
     const files = fs.readdirSync(process.cwd(), { withFileTypes: true })
-    const sdPluginPath = files.find(
+    const foundPlugin = files.find(
       file => file.isDirectory() && file.name.endsWith('.sdPlugin')
     )
 
-    if (!sdPluginPath) {
+    if (!foundPlugin) {
       core.setFailed(
         'path not specified and no .sdPlugin directory found in the current working directory.'
       )
       return
     } else {
-      sdPluginPath = file.name
+      sdPluginPath = foundPlugin.name
       core.info(`Using auto-detected .sdPlugin directory '${sdPluginPath}'`)
     }
   }
