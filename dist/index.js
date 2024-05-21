@@ -4030,31 +4030,17 @@ function getVersion() {
   // Version wasn't specified so try getting something from the github environment
   const githubRef = process.env.GITHUB_REF
 
-  if (!githubRef) {
-    core.warning('No github ref found, using manifest.json version')
-    return undefined
-  }
-
   // Try getting the version from the release tag
-  if (githubRef.startsWith('refs/tags/')) {
+  if (githubRef && githubRef.startsWith('refs/tags/')) {
     version = `${githubRef.replace('refs/tags/', '').replace('v', '')}.0`
     core.info(`Using github tag version '${version}'`)
-
-    return version
-  }
-
-  // Try getting the version from ${{ github.event.number }}.${{ github.run_number }}
-  if (githubRef.startsWith('refs/heads/')) {
+  } else {
+    // Use the version from ${{ github.event.number }}.${{ github.run_number }}
     version = `0.0.${process.env.GITHUB_RUN_NUMBER}.${process.env.GITHUB_RUN_ID}`
     core.info(`Using github event and run number for version: '${version}'`)
-
-    return version
   }
 
-  core.warning(
-    'No version found in github environment, using manifest.json version'
-  )
-  return undefined
+  return version
 }
 
 module.exports = {
