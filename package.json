@@ -66,7 +66,7 @@
   "dependencies": {
     "@actions/core": "^1.10.1",
     "@actions/exec": "^1.1.1",
-    "@elgato/cli": "0.3.1"
+    "@elgato/cli": "0.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
