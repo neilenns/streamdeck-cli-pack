@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 const exec = require('@actions/exec')
 const core = require('@actions/core')
 const fs = require('fs')

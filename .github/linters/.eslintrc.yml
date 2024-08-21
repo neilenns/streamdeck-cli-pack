@@ -46,6 +46,5 @@ rules:
     'no-console': 'off',
     'no-unused-vars': 'off',
     'prettier/prettier': 'error',
-    'semi': 'off',
-    'space-before-function-paren': 'off'
+    'semi': 'off'
   }
