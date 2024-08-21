@@ -6,16 +6,16 @@
     {
       "groupName": "definitelyTyped",
       "matchDepTypes": ["devDependencies"],
-      "matchPackagePrefixes": ["@types/"],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": ["@types/{/,}**"]
     },
     {
       "groupName": "linting",
       "groupSlug": "eslint-plugin",
       "matchDepTypes": ["devDependencies"],
-      "matchPackagePrefixes": ["eslint-plugin"],
       "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": ["eslint-plugin{/,}**"]
     },
     {
       "groupName": "all minor and patch dependencies",
