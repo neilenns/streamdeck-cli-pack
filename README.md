@@ -16,8 +16,6 @@ your repository. The version will be set to either the release tag (e.g.
 `1.0.0.0` for a release tag of `v1.0.0`), or the run number if used in a pull
 request workflow (e.g. `0.0.36.0` for run #36).
 
-v1 of this action uses version 0.3.1 of @elgato/cli.
-
 ## Real-world examples
 
 For a complete example of using this plugin in an end-to-end pull request
