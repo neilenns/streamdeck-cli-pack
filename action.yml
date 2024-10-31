@@ -1,5 +1,5 @@
-name: 'Stream Deck cli pack'
-description: 'Packs a Stream Deck plugin using the Stream Deck cli tool'
+name: 'streamdeck cli pack'
+description: 'Packs a Stream Deck plugin using the streamdeck cli tool'
 author: 'Neil Enns'
 branding:
   icon: 'package'
