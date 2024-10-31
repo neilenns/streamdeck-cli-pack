@@ -1,27 +1,27 @@
 {
-  "name": "javascript-action",
-  "description": "GitHub Actions JavaScript Template",
+  "name": "streamdeck-cli-pack",
+  "description": "Packs a Stream Deck plugin using the streamdeck cli tool",
   "version": "0.0.0",
-  "author": "",
+  "author": "Neil Enns",
   "private": true,
-  "homepage": "https://github.com/actions/javascript-action#readme",
+  "homepage": "https://github.com/neilenns/streamdeck-cli-pack#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/javascript-action.git"
+    "url": "git+https://github.com/neilenns/streamdeck-cli-pack.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/javascript-action/issues"
+    "url": "https://github.com/neilenns/streamdeck-cli-pack/issues"
   },
   "keywords": [
     "GitHub",
     "Actions",
-    "JavaScript"
+    "streamdeck"
   ],
   "exports": {
     ".": "./dist/index.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "bundle": "npm run format:write && npm run package",
