@@ -1,6 +1,6 @@
-# GitHub Action to pack StreamDeck plugins
+# GitHub Action to pack Stream Deck plugins
 
-This action packs a StreamDeck plugin for release.
+This action packs a Stream Deck plugin for release.
 
 ## Basic use
 

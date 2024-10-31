@@ -3479,7 +3479,7 @@ async function run() {
     args.push('--no-update-check')
   }
 
-  // Dump the version of the streamdeck cli being used
+  // Dump the version of the Stream Deck cli being used
   await exec.exec('npx', ['streamdeck', '-v'])
 
   // Run the actual command
