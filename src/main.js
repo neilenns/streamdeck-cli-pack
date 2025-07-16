@@ -29,7 +29,7 @@ async function run() {
 
   // Set the --ignore-validation flag if requested.
   if (core.getBooleanInput('ignoreValidation')) {
-    args.push('ignore-validation')
+    args.push('--ignore-validation')
   }
 
   // Set the --force-update-check and --no-update-check flags if requested,
