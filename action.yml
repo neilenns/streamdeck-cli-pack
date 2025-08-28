@@ -32,7 +32,7 @@ inputs:
     required: false
 
   ignoreValidation:
-    description: 'Bypasses validation errors (not recommended)'
+    description: 'If true, bypasses validation errors (not recommended)'
     default: false
     required: false
 
