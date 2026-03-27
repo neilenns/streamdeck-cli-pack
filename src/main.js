@@ -1,6 +1,6 @@
-const exec = require('@actions/exec')
-const core = require('@actions/core')
-const fs = require('fs')
+import * as exec from '@actions/exec'
+import * as core from '@actions/core'
+import { readdirSync, existsSync } from 'fs'
 
 async function run() {
   const args = ['streamdeck', 'pack']
@@ -67,7 +67,7 @@ function getSdPluginPath() {
   let sdPluginPath = core.getInput('path')
 
   if (sdPluginPath === '') {
-    const files = fs.readdirSync(process.cwd(), { withFileTypes: true })
+    const files = readdirSync(process.cwd(), { withFileTypes: true })
     const foundPlugin = files.find(
       file => file.isDirectory() && file.name.endsWith('.sdPlugin')
     )
@@ -83,7 +83,7 @@ function getSdPluginPath() {
     }
   }
 
-  if (!fs.existsSync(sdPluginPath)) {
+  if (!existsSync(sdPluginPath)) {
     core.setFailed(`Path '${sdPluginPath}' does not exist.`)
     return
   }
@@ -119,6 +119,4 @@ function getVersion() {
   return version
 }
 
-module.exports = {
-  run
-}
+export { run }
