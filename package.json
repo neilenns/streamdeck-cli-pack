@@ -64,7 +64,7 @@
     ]
   },
   "dependencies": {
-    "@actions/core": "^2.0.3",
+    "@actions/core": "^3.0.0",
     "@actions/exec": "^2.0.0",
     "@elgato/cli": "1.7.3"
   },
