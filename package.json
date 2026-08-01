@@ -80,5 +80,8 @@
     "jest": "^30.3.0",
     "make-coverage-badge": "^1.2.0",
     "prettier": "^3.8.1"
+  },
+  "allowScripts": {
+    "unrs-resolver@1.12.2": true
   }
 }
