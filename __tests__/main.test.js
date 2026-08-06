@@ -1,96 +1,139 @@
 /**
  * Unit tests for the action's main functionality, src/main.js
  */
-const core = require('@actions/core')
-const main = require('../src/main')
+import { jest } from '@jest/globals'
 
-// Mock the GitHub Actions core library
-const debugMock = jest.spyOn(core, 'debug').mockImplementation()
-const getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
-const setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
-const setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+const mockGetInput = jest.fn()
+const mockGetBooleanInput = jest.fn()
+const mockSetFailed = jest.fn()
+const mockInfo = jest.fn()
+const mockExec = jest.fn()
+const mockReaddirSync = jest.fn()
+const mockExistsSync = jest.fn()
 
-// Mock the action's main function
-const runMock = jest.spyOn(main, 'run')
+await jest.unstable_mockModule('@actions/core', () => ({
+  getInput: mockGetInput,
+  getBooleanInput: mockGetBooleanInput,
+  setFailed: mockSetFailed,
+  info: mockInfo
+}))
 
-// Other utilities
-const timeRegex = /^\d{2}:\d{2}:\d{2}/
+await jest.unstable_mockModule('@actions/exec', () => ({
+  exec: mockExec
+}))
 
-describe('action', () => {
+await jest.unstable_mockModule('fs', () => ({
+  readdirSync: mockReaddirSync,
+  existsSync: mockExistsSync
+}))
+
+const { run } = await import('../src/main.js')
+
+describe('run', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockGetBooleanInput.mockReturnValue(false)
+    mockGetInput.mockReturnValue('')
+    mockExec.mockResolvedValue(0)
   })
 
-  it('sets the time output', async () => {
-    // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => {
-      switch (name) {
-        case 'milliseconds':
-          return '500'
-        default:
-          return ''
-      }
-    })
-
-    await main.run()
-    expect(runMock).toHaveReturned()
-
-    // Verify that all of the core library functions were called correctly
-    expect(debugMock).toHaveBeenNthCalledWith(1, 'Waiting 500 milliseconds ...')
-    expect(debugMock).toHaveBeenNthCalledWith(
-      2,
-      expect.stringMatching(timeRegex)
+  it('uses the provided path', async () => {
+    mockGetInput.mockImplementation(name =>
+      name === 'path' ? 'my.sdPlugin' : ''
     )
-    expect(debugMock).toHaveBeenNthCalledWith(
-      3,
-      expect.stringMatching(timeRegex)
-    )
-    expect(setOutputMock).toHaveBeenNthCalledWith(
-      1,
-      'time',
-      expect.stringMatching(timeRegex)
+    mockExistsSync.mockReturnValue(true)
+
+    await run()
+
+    expect(mockExec).toHaveBeenCalledWith(
+      'npx',
+      expect.arrayContaining(['pack', 'my.sdPlugin'])
     )
   })
 
-  it('sets a failed status', async () => {
-    // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => {
-      switch (name) {
-        case 'milliseconds':
-          return 'this is not a number'
-        default:
-          return ''
-      }
-    })
+  it('auto-detects the sdPlugin directory', async () => {
+    mockGetInput.mockReturnValue('')
+    mockReaddirSync.mockReturnValue([
+      { isDirectory: () => true, name: 'my.sdPlugin' }
+    ])
+    mockExistsSync.mockReturnValue(true)
 
-    await main.run()
-    expect(runMock).toHaveReturned()
+    await run()
 
-    // Verify that all of the core library functions were called correctly
-    expect(setFailedMock).toHaveBeenNthCalledWith(
-      1,
-      'milliseconds not a number'
+    expect(mockExec).toHaveBeenCalledWith(
+      'npx',
+      expect.arrayContaining(['pack', 'my.sdPlugin'])
     )
   })
 
-  it('fails if no input is provided', async () => {
-    // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => {
-      switch (name) {
-        case 'milliseconds':
-          throw new Error('Input required and not supplied: milliseconds')
-        default:
-          return ''
-      }
+  it('fails when no sdPlugin directory is found', async () => {
+    mockGetInput.mockReturnValue('')
+    mockReaddirSync.mockReturnValue([])
+
+    await run()
+
+    expect(mockSetFailed).toHaveBeenCalledWith(
+      'path not specified and no .sdPlugin directory found in the current working directory.'
+    )
+  })
+
+  it('fails when the provided path does not exist', async () => {
+    mockGetInput.mockImplementation(name =>
+      name === 'path' ? 'missing.sdPlugin' : ''
+    )
+    mockExistsSync.mockReturnValue(false)
+
+    await run()
+
+    expect(mockSetFailed).toHaveBeenCalledWith(
+      "Path 'missing.sdPlugin' does not exist."
+    )
+  })
+
+  it('fails when both forceUpdateCheck and noUpdateCheck are true', async () => {
+    mockGetInput.mockImplementation(name =>
+      name === 'path' ? 'my.sdPlugin' : ''
+    )
+    mockGetBooleanInput.mockImplementation(
+      name => name === 'forceUpdateCheck' || name === 'noUpdateCheck'
+    )
+    mockExistsSync.mockReturnValue(true)
+
+    await run()
+
+    expect(mockSetFailed).toHaveBeenCalledWith(
+      'forceUpdateCheck and noUpdateCheck cannot be set to true at the same time'
+    )
+  })
+
+  it('appends --output when outputPath is provided', async () => {
+    mockGetInput.mockImplementation(name => {
+      if (name === 'path') return 'my.sdPlugin'
+      if (name === 'outputPath') return 'output/'
+      return ''
     })
+    mockExistsSync.mockReturnValue(true)
 
-    await main.run()
-    expect(runMock).toHaveReturned()
+    await run()
 
-    // Verify that all of the core library functions were called correctly
-    expect(setFailedMock).toHaveBeenNthCalledWith(
-      1,
-      'Input required and not supplied: milliseconds'
+    expect(mockExec).toHaveBeenCalledWith(
+      'npx',
+      expect.arrayContaining(['--output', 'output/'])
+    )
+  })
+
+  it('appends --force when force is true', async () => {
+    mockGetInput.mockImplementation(name =>
+      name === 'path' ? 'my.sdPlugin' : ''
+    )
+    mockGetBooleanInput.mockImplementation(name => name === 'force')
+    mockExistsSync.mockReturnValue(true)
+
+    await run()
+
+    expect(mockExec).toHaveBeenCalledWith(
+      'npx',
+      expect.arrayContaining(['--force'])
     )
   })
 })

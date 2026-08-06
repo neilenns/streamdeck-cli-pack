@@ -1,12 +1,11 @@
 /**
  * The entrypoint for the action.
  */
-const core = require('@actions/core')
+import * as core from '@actions/core'
+import { run } from './main.js'
 
 try {
-  const { run } = require('./main')
-
-  run()
+  await run()
 } catch (error) {
   core.setFailed(error.message)
 }
