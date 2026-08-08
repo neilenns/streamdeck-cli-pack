@@ -4,11 +4,16 @@ This action packs a Stream Deck plugin for release.
 
 ## Basic use
 
+> [!IMPORTANT]
+>
+> This action depends on the StreamDeck SDK being installed by the project using
+> the action. v2 of the action requires SDK version 1.8.0 or later.
+
 Add the following step to your workflow:
 
 ```yaml
 - name: Pack
-  uses: neilenns/streamdeck-cli-pack@v1
+  uses: neilenns/streamdeck-cli-pack@v2
 ```
 
 This will automatically pack the folder ending in `.sdPlugin` in the root of
