@@ -31240,6 +31240,11 @@ async function run() {
     args.push('--version', version)
   }
 
+  // Set the --no-file-list flag if requested.
+  if (core.getBooleanInput('noFileList')) {
+    args.push('--no-file-list')
+  }
+
   // Set the --force flag if requested.
   if (core.getBooleanInput('force')) {
     args.push('--force')
