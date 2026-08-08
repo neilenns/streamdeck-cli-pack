@@ -58,6 +58,8 @@ inputs:
   noFileList:
     description:
       'If true, prevents the packaged file list from being displayed.'
+    default: 'false'
+    required: false
 
 runs:
   using: node24
