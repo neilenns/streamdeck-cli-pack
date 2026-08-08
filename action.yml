@@ -21,7 +21,7 @@ inputs:
 
   force:
     description: 'If true, overwrites a package if it exists.'
-    default: false
+    default: 'false'
     required: false
 
   version:
@@ -33,27 +33,31 @@ inputs:
 
   ignoreValidation:
     description: 'If true, bypasses validation errors (not recommended)'
-    default: false
+    default: 'false'
     required: false
 
   dryRun:
     description: 'If true, generates a report without creating a package.'
-    default: false
+    default: 'false'
     required: false
 
   forceUpdateCheck:
     description:
       'If true, forces an update check for new validation rules. Cannot be used
       in conjunction with noUpdateCheck.'
-    default: false
+    default: 'false'
     required: false
 
   noUpdateCheck:
     description:
       'If true, prevents an update check of new validation rules. Cannot be used
       in conjunction with forceUpdateCheck.'
-    default: false
+    default: 'false'
     required: false
+
+  noFileList:
+    description:
+      'If true, prevents the packaged file list from being displayed.'
 
 runs:
   using: node24
