@@ -1,0 +1,14 @@
+{
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/prettier:1": {
+      "version": "1.0.2",
+      "resolved": "ghcr.io/devcontainers-extra/features/prettier@sha256:be8a83826ac496bd1e298ecf1052e600bdddd8ef3248ca630b53a9bdea3d3d76",
+      "integrity": "sha256:be8a83826ac496bd1e298ecf1052e600bdddd8ef3248ca630b53a9bdea3d3d76"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "1.1.0",
+      "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671",
+      "integrity": "sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671"
+    }
+  }
+}
